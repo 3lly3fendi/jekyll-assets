@@ -8,8 +8,14 @@ module Jekyll
     class Default
       class CSS < Default
         content_types "text/css"
-        static rel: "stylesheet", type: "text/css"
+        static rel: "stylesheet"
         internal!
+
+        # --
+        def set_type
+          return if args.key?(:type) || !config[:type]
+          args[:type] = "text/css"
+        end
 
         def set_href_if_url
           return if args[:inline] || !asset.is_a?(Url)
@@ -52,6 +58,7 @@ Jekyll::Assets::Hook.register :config, :before_merge do |c|
     defaults: {
       css: {
         integrity: Jekyll.production?,
+        type: true,
       },
     },
   })
